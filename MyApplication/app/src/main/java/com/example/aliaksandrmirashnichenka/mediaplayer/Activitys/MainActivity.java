@@ -211,6 +211,6 @@ public class MainActivity extends AppCompatActivity implements PlayerFragmentLis
     public void videoChanged(long videoID) {
         mReplaceVideo = true;
         mMovieId = String.valueOf(videoID);
-        loadData(mMovieId);
+        loadData();
     }
 }
