@@ -191,9 +191,15 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
             }
 
             imageView.setOnClickListener(v -> {
+                PlayerFragmentListener listener = (PlayerFragmentListener) PlayerFragment.this.getActivity();
+                if (listener != null) {
+                    listener.videoChanged(movie.getID());
+                }
+                /*
                 Intent startIntent = new Intent(getContext(), MainActivity_.class);
                 startIntent.putExtra(MainActivity.MOVIE_ID, movie.getID());
                 startActivity(startIntent);
+                */
             });
         }
     }
@@ -537,8 +543,8 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
     private void updateActivity() {
         if (!mPlayReady) {
             Activity activity = getActivity();
-            if (activity instanceof FragmentListener) {
-                FragmentListener listener = (FragmentListener) activity;
+            if (activity instanceof PlayerFragmentListener) {
+                PlayerFragmentListener listener = (PlayerFragmentListener) activity;
                 listener.movieLoaded();
             }
             mPlayReady = true;

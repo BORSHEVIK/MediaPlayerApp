@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 
-import com.example.aliaksandrmirashnichenka.mediaplayer.Fragments.FragmentListener;
+import com.example.aliaksandrmirashnichenka.mediaplayer.Fragments.PlayerFragmentListener;
 import com.example.aliaksandrmirashnichenka.mediaplayer.Fragments.PlayerFragment;
 import com.example.aliaksandrmirashnichenka.mediaplayer.Fragments.PlayerFragment_;
 import com.example.aliaksandrmirashnichenka.mediaplayer.Fragments.SplashFragment;
@@ -25,7 +25,7 @@ import org.androidannotations.annotations.UiThread;
 import java.util.ArrayList;
 
 @EActivity(R.layout.activity_main)
-public class MainActivity extends AppCompatActivity implements FragmentListener {
+public class MainActivity extends AppCompatActivity implements PlayerFragmentListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -213,5 +213,12 @@ public class MainActivity extends AppCompatActivity implements FragmentListener 
             mMovieLoaded = true;
         }
         closeSplash();
+    }
+
+    @Override
+    public void videoChanged(long videoID) {
+        mReplaceVideo = true;
+        mMovieId = String.valueOf(videoID);
+        loadData(mMovieId);
     }
 }

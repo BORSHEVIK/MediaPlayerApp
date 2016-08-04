@@ -65,8 +65,8 @@ public class SplashFragment extends Fragment {
 
     private void closeSplash(boolean forceClose) {
         Activity activity = getActivity();
-        if (activity instanceof FragmentListener) {
-            FragmentListener listener = (FragmentListener) activity;
+        if (activity instanceof PlayerFragmentListener) {
+            PlayerFragmentListener listener = (PlayerFragmentListener) activity;
             listener.splashCanClose(forceClose);
         }
     }
