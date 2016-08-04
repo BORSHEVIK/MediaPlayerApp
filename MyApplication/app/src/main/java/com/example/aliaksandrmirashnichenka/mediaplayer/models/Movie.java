@@ -1,5 +1,7 @@
 package com.example.aliaksandrmirashnichenka.mediaplayer.models;
 
+import com.bluelinelabs.logansquare.annotation.JsonField;
+import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,27 +13,32 @@ import java.io.Serializable;
 /**
  * Created by amirashnichenka on 8/2/2016.
  */
+@JsonObject
 public class Movie implements Serializable {
 
+    @JsonField
     @JsonProperty("id")
-    private long mID;
+    private long id;
 
+    @JsonField
     @JsonProperty("title")
-    private String mTitle;
+    private String title;
 
+    @JsonField
     @JsonProperty("description")
-    private String mDescription;
+    private String description;
 
+    @JsonField
     @JsonProperty("meta")
-    private Meta mMeta;
+    private Meta meta;
 
+    @JsonField
     @JsonProperty("images")
-    private Image mImage;
+    private Image images;
 
+    @JsonField
     @JsonProperty("streams")
-    private Stream mStream;
-
-    private Movie(){}
+    private Stream streams;
 
     public static Movie convertJsonToObject(JSONObject jsonObject) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -39,50 +46,50 @@ public class Movie implements Serializable {
     }
 
     public long getID() {
-        return mID;
+        return id;
     }
 
     public void setID(long mID) {
-        this.mID = mID;
+        this.id = mID;
     }
 
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
     public void setTitle(String mTitle) {
-        this.mTitle = mTitle;
+        this.title = mTitle;
     }
 
     public Meta getMeta() {
-        return mMeta;
+        return meta;
     }
 
     public void setMeta(Meta mMeta) {
-        this.mMeta = mMeta;
+        this.meta = mMeta;
     }
 
-    public Image getImage() {
-        return mImage;
+    public Image getImages() {
+        return images;
     }
 
-    public void setImage(Image mImage) {
-        this.mImage = mImage;
+    public void setImages(Image mImage) {
+        this.images = mImage;
     }
 
-    public Stream getStream() {
-        return mStream;
+    public Stream getStreams() {
+        return streams;
     }
 
-    public void setStream(Stream mStream) {
-        this.mStream = mStream;
+    public void setStreams(Stream mStream) {
+        this.streams = mStream;
     }
 
     public String getDescription() {
-        return mDescription;
+        return description;
     }
 
     public void setDescription(String mDescription) {
-        this.mDescription = mDescription;
+        this.description = mDescription;
     }
 }

@@ -1,5 +1,7 @@
 package com.example.aliaksandrmirashnichenka.mediaplayer.models;
 
+import com.bluelinelabs.logansquare.annotation.JsonField;
+import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -12,45 +14,47 @@ import java.util.List;
 /**
  * Created by amirashnichenka on 8/2/2016.
  */
+@JsonObject
 public class Meta implements Serializable {
 
+    @JsonField
     @JsonProperty("releaseYear")
-    private int mYear;
+    private int releaseYear;
 
+    @JsonField
     @JsonProperty("directors")
-    private List<Director> mDirectors;
+    private List<Director> directors;
 
+    @JsonField
     @JsonProperty("actors")
-    private List<Actor> mActors;
-
-    private Meta(){}
+    private List<Actor> actors;
 
     public static Meta convertJsonToObject(JSONObject jsonObject) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(jsonObject.toString(), Meta.class);
     }
 
-    public int getYear() {
-        return mYear;
+    public int getReleaseYear() {
+        return releaseYear;
     }
 
-    public void setYear(int mYear) {
-        this.mYear = mYear;
+    public void setReleaseYear(int mYear) {
+        this.releaseYear = mYear;
     }
 
     public List<Director> getDirectors() {
-        return mDirectors;
+        return directors;
     }
 
     public void setDirectors(List<Director> mDirectors) {
-        this.mDirectors = mDirectors;
+        this.directors = mDirectors;
     }
 
     public List<Actor> getActors() {
-        return mActors;
+        return actors;
     }
 
     public void setActors(List<Actor> mActors) {
-        this.mActors = mActors;
+        this.actors = mActors;
     }
 }

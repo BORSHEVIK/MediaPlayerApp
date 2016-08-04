@@ -1,5 +1,7 @@
 package com.example.aliaksandrmirashnichenka.mediaplayer.models;
 
+import com.bluelinelabs.logansquare.annotation.JsonField;
+import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,15 +13,16 @@ import java.io.Serializable;
 /**
  * Created by amirashnichenka on 8/2/2016.
  */
+@JsonObject
 public class Stream implements Serializable {
 
+    @JsonField
     @JsonProperty("type")
-    private String mType;
+    private String type;
 
+    @JsonField
     @JsonProperty("url")
-    private String mUrl;
-
-    private Stream() {}
+    private String url;
 
     public static Stream getObjectFromJson(JSONObject jsonObject) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -27,18 +30,18 @@ public class Stream implements Serializable {
     }
 
     public String getType() {
-        return mType;
+        return type;
     }
 
     public void setType(String mType) {
-        this.mType = mType;
+        this.type = mType;
     }
 
     public String getUrl() {
-        return mUrl;
+        return url;
     }
 
     public void setUrl(String mUrl) {
-        this.mUrl = mUrl;
+        this.url = mUrl;
     }
 }

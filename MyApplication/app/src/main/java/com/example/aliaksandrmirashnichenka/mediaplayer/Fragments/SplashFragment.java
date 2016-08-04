@@ -2,11 +2,9 @@ package com.example.aliaksandrmirashnichenka.mediaplayer.Fragments;
 
 import android.app.Activity;
 import android.graphics.Point;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.Display;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,7 +16,6 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.ViewById;
-import org.w3c.dom.Text;
 
 /**
  * Created by aliaksandrmirashnichenka on 01.08.16.
@@ -74,9 +71,9 @@ public class SplashFragment extends Fragment {
         }
     }
 
-    public void initMovie(Movie movie) {
+    private void initMovie(Movie movie) {
         mTitle.setText(movie.getTitle());
-        mYear.setText(movie.getMeta().getYear());
+        mYear.setText(String.valueOf(movie.getMeta().getReleaseYear()));
         mDescription.setText(movie.getDescription());
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
@@ -84,6 +81,6 @@ public class SplashFragment extends Fragment {
         display.getSize(size);
         int width = size.x;
 
-        mImage.setImageBitmap(ImageHelper.decodeSampledBitmapFromResource(getResources(), "images/" + movie.getImage().getPlaceholderName(), width, width));
+        mImage.setImageBitmap(ImageHelper.decodeSampledBitmapFromResource(getResources(), "images/" + movie.getImages().getPlaceholder(), width, width));
     }
 }

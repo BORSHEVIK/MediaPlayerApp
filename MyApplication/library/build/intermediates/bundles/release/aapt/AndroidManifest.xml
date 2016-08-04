@@ -16,7 +16,6 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.android.exoplayer" >
-
     <!--
     Important: ExoPlayerLib specifies a minSdkVersion of 9 because various components provided by
     the library may be of use on older devices. However, please note that the core video playback

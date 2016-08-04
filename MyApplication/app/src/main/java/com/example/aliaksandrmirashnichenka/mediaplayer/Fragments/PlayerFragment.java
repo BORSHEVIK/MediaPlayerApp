@@ -4,17 +4,28 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.aliaksandrmirashnichenka.mediaplayer.MainActivity;
+import com.example.aliaksandrmirashnichenka.mediaplayer.MainActivity_;
 import com.example.aliaksandrmirashnichenka.mediaplayer.R;
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.DashRendererBuilder;
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.DemoPlayer;
@@ -25,6 +36,8 @@ import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.SmoothStreamin
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.SmoothStreamingTestMediaDrmCallback;
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.WidevineTestMediaDrmCallback;
 import com.example.aliaksandrmirashnichenka.mediaplayer.models.Movie;
+import com.example.aliaksandrmirashnichenka.mediaplayer.util.ImageHelper;
+import com.google.android.exoplayer.AspectRatioFrameLayout;
 import com.google.android.exoplayer.ExoPlaybackException;
 import com.google.android.exoplayer.ExoPlayer;
 import com.google.android.exoplayer.MediaCodecTrackRenderer;
@@ -41,7 +54,9 @@ import com.google.android.exoplayer.util.Util;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
+import org.androidannotations.annotations.ViewById;
 
+import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.ArrayList;
@@ -80,13 +95,32 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
 
     private boolean mPlayReady;
 
+    //
+    @ViewById(R.id.video_frame)
+    protected AspectRatioFrameLayout videoFrame;
+
+    @ViewById(R.id.surface_view)
+    protected SurfaceView surfaceView;
+
+    private MediaController mediaController;
+
+    @ViewById(R.id.navigation_panel)
+    protected LinearLayout navigationLayout;
+
+    @ViewById(R.id.progress)
+    protected ProgressBar progressBar;
+
+    @ViewById(R.id.root)
+    protected View root;
+    //
+
     @InstanceState
     protected ArrayList<Movie> mMovies;
 
     @InstanceState
     protected Movie mCurrentMovie;
 
-    public void init(Movie movie, ArrayList<Movie> movies) {
+    public void initInstance(Movie movie, ArrayList<Movie> movies) {
         mMovies = movies;
         mCurrentMovie = movie;
     }
@@ -96,6 +130,71 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
 
         if (!mPlayReady) {
             mPlayReady = false;
+        }
+
+        root.setOnTouchListener((view1, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                toggleControlsVisibility();
+            } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                view1.performClick();
+            }
+            return true;
+        });
+        root.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE
+                        || keyCode == KeyEvent.KEYCODE_MENU) {
+                    return false;
+                }
+                return mediaController.dispatchKeyEvent(event);
+            }
+        });
+
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        videoFrame.setAspectRatio(1f * size.x / size.y);
+
+        surfaceView.getHolder().addCallback(PlayerFragment.this);
+
+        mediaController = new KeyCompatibleMediaController(getContext());
+        mediaController.setAnchorView(root);
+
+        CookieHandler currentHandler = CookieHandler.getDefault();
+        if (currentHandler != defaultCookieManager) {
+            CookieHandler.setDefault(defaultCookieManager);
+        }
+
+        audioCapabilitiesReceiver = new AudioCapabilitiesReceiver(getContext(), PlayerFragment.this);
+        audioCapabilitiesReceiver.register();
+
+        List<Movie> movieList = mMovies;
+
+        for (int i = 0; i < movieList.size(); i++) {
+            final Movie movie = movieList.get(i);
+            final ImageView imageView = (ImageView) navigationLayout.getChildAt(i);
+
+            ViewTreeObserver viewTreeObserver = imageView.getViewTreeObserver();
+            if (viewTreeObserver.isAlive()) {
+                viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        imageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        int width = imageView.getWidth();
+                        int height = imageView.getHeight();
+                        imageView.setImageBitmap(ImageHelper.decodeSampledBitmapFromResource(getResources(),
+                                "images/" + movie.getImages().getCover(), width, height));
+                    }
+                });
+            }
+
+            imageView.setOnClickListener(v -> {
+                Intent startIntent = new Intent(getContext(), MainActivity_.class);
+                startIntent.putExtra(MainActivity.MOVIE_ID, movie.getID());
+                startActivity(startIntent);
+            });
         }
     }
 
@@ -129,7 +228,7 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
      */
     private void onShown() {
         Movie movie = mCurrentMovie;
-        contentUri = Uri.parse(movie.getStream().getUrl());
+        contentUri = Uri.parse(movie.getStreams().getUrl());
         // Use only this type
         contentType = Util.TYPE_OTHER;
 
@@ -174,43 +273,6 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
 
         audioCapabilitiesReceiver.unregister();
         releasePlayer();
-    }
-
-
-
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-
-    }
-
-    @Override
-    public void onId3Metadata(List<Id3Frame> id3Frames) {
-
-    }
-
-    @Override
-    public void onStateChanged(boolean playWhenReady, int playbackState) {
-
-    }
-
-    @Override
-    public void onError(Exception e) {
-
-    }
-
-    @Override
-    public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-
     }
 
     // AudioCapabilitiesReceiver.Listener methods
@@ -300,8 +362,8 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
             player.setMetadataListener(this);
             player.seekTo(playerPosition);
             playerNeedsPrepare = true;
-            viewHolder.mediaController.setMediaPlayer(player.getPlayerControl());
-            viewHolder.mediaController.setEnabled(true);
+            mediaController.setMediaPlayer(player.getPlayerControl());
+            mediaController.setEnabled(true);
             eventLogger = new EventLogger();
             eventLogger.startSession();
             player.addListener(eventLogger);
@@ -312,7 +374,7 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
             player.prepare();
             playerNeedsPrepare = false;
         }
-        player.setSurface(viewHolder.surfaceView.getHolder().getSurface());
+        player.setSurface(surfaceView.getHolder().getSurface());
         player.setPlayWhenReady(playWhenReady);
     }
 
@@ -364,7 +426,7 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
                 text += "unknown";
                 break;
         }
-        viewHolder.progressBar.setVisibility(showProgress ? View.VISIBLE : View.GONE);
+        progressBar.setVisibility(showProgress ? View.VISIBLE : View.GONE);
         Log.d(TAG, text);
     }
 
@@ -406,13 +468,13 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
 
     @Override
     public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthAspectRatio) {
-        viewHolder.videoFrame.setAspectRatio(height == 0 ? 1 : (width * pixelWidthAspectRatio) / height);
+        videoFrame.setAspectRatio(height == 0 ? 1 : (width * pixelWidthAspectRatio) / height);
     }
 
     // User controls
 
     private void toggleControlsVisibility() {
-        if (viewHolder.mediaController.isShowing()) {
+        if (mediaController.isShowing()) {
             hideControls();
         } else {
             showControls();
@@ -420,11 +482,11 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
     }
 
     private void showControls() {
-        viewHolder.mediaController.show(0);
+        mediaController.show(0);
     }
 
     private void hideControls() {
-        viewHolder.mediaController.hide();
+        mediaController.hide();
     }
 
     // DemoPlayer.MetadataListener implementation
@@ -483,16 +545,12 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
         }
     }
 
-    private static final class KeyCompatibleMediaController extends MediaController {
+    private final class KeyCompatibleMediaController extends MediaController {
 
         private MediaController.MediaPlayerControl playerControl;
 
-        private ViewHolder viewHolder;
-
-        public KeyCompatibleMediaController(Context context, ViewHolder viewHolder) {
+        public KeyCompatibleMediaController(Context context) {
             super(context);
-
-            this.viewHolder = viewHolder;
         }
 
         @Override
@@ -523,20 +581,22 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
         @Override
         public void show(int timeout) {
             super.show(timeout);
-            if (viewHolder != null) {
-                viewHolder.showNavigation();
-            }
+            showNavigation();
         }
 
         @Override
         public void hide() {
             super.hide();
-            if (viewHolder != null) {
-                viewHolder.hideNavigation();
-            }
+            hideNavigation();
         }
     }
 
+    public void showNavigation() {
+        navigationLayout.setVisibility(View.VISIBLE);
+    }
 
+    public void hideNavigation() {
+        navigationLayout.setVisibility(View.INVISIBLE);
+    }
 
 }

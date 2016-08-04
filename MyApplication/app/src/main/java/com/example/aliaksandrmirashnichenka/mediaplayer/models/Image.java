@@ -1,5 +1,7 @@
 package com.example.aliaksandrmirashnichenka.mediaplayer.models;
 
+import com.bluelinelabs.logansquare.annotation.JsonField;
+import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,33 +13,35 @@ import java.io.Serializable;
 /**
  * Created by amirashnichenka on 8/2/2016.
  */
+@JsonObject
 public class Image implements Serializable {
+
+    @JsonField
     @JsonProperty("cover")
-    private String mCoverName;
+    private String cover;
 
+    @JsonField
     @JsonProperty("placeholder")
-    private String mPlaceholderName;
-
-    private Image(){}
+    private String placeholder;
 
     public static Image convertJsonToObject(JSONObject jsonObject) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(jsonObject.toString(), Image.class);
     }
 
-    public String getCoverName() {
-        return mCoverName;
+    public String getCover() {
+        return cover;
     }
 
-    public void setCoverName(String mCoverName) {
-        this.mCoverName = mCoverName;
+    public void setCover(String mCoverName) {
+        this.cover = mCoverName;
     }
 
-    public String getPlaceholderName() {
-        return mPlaceholderName;
+    public String getPlaceholder() {
+        return placeholder;
     }
 
-    public void setPlaceholderName(String mPlaceholderName) {
-        this.mPlaceholderName = mPlaceholderName;
+    public void setPlaceholder(String mPlaceholderName) {
+        this.placeholder = mPlaceholderName;
     }
 }

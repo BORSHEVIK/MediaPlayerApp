@@ -23,12 +23,13 @@ import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.UiThread;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity implements FragmentListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    public static final String MOVIE_ID = "Movie id";
 
     private boolean mMovieLoaded;
 
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListener 
     private boolean mInSavedState;
 
     @AfterViews
-    private void initActivity() {
+    protected void initActivity() {
         if (!mReplaceVideo) {
             mReplaceVideo = true;
         }
@@ -59,7 +60,8 @@ public class MainActivity extends AppCompatActivity implements FragmentListener 
 
         updateScreenOrientation();
 
-        if (mMovieId == null) {
+        mMovieId = getIntent().getStringExtra(MOVIE_ID);
+        if (mMovieId == null ) {
             mMovieId = BuildConfig.MOVIE_ID;
         }
         loadData(mMovieId);
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListener 
      * @param id movie id
      */
     @Background
-    private void loadData(String id) {
+    protected void loadData(String id) {
         try {
             ArrayList<Movie> list;
             if (mMovieList != null) {
@@ -87,14 +89,14 @@ public class MainActivity extends AppCompatActivity implements FragmentListener 
                 MovieStorage movieStorage = new MovieStorage(getApplicationContext());
                 list = new ArrayList<>(movieStorage.loadMovies());
             }
-            loadDataComplete(mMovieList);
+            loadDataComplete(list);
         } catch(Throwable throwable) {
             Log.e(TAG, "startLoadData", throwable);
         }
     }
 
     @UiThread
-    private void loadDataComplete(ArrayList<Movie> list) {
+    protected void loadDataComplete(ArrayList<Movie> list) {
         mMovieList = list;
         showFragments(mMovieId);
     }
@@ -122,14 +124,13 @@ public class MainActivity extends AppCompatActivity implements FragmentListener 
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        //PlayerFragment videoFragment = PlayerFragment_.builder().build();
-        //videoFragment.
-        //PlayerFragment videoFragment = PlayerFragment.getInstance(movie, movieList);
-        //fragmentManager.beginTransaction().replace(R.id.fragment_container_video, videoFragment).commit();
+        PlayerFragment playerFragment = PlayerFragment_.builder().build();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container_video, playerFragment).commit();
+        playerFragment.initInstance(movie, mMovieList);
 
         SplashFragment splashFragment = SplashFragment_.builder().build();
-        splashFragment.initMovie(movie);
         fragmentManager.beginTransaction().add(R.id.fragment_container_splash, splashFragment).commit();
+        splashFragment.initInstance(movie);
 
         mReplaceVideo = false;
     }
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements FragmentListener 
 
         if (playerFragment instanceof PlayerFragment) {
             // Invoke playing the video after splash is closed
-            //((PlayerFragment) videoFragment).playWhenReady();
+            ((PlayerFragment) playerFragment).playWhenReady();
         }
     }
 
@@ -201,11 +202,16 @@ public class MainActivity extends AppCompatActivity implements FragmentListener 
 
     @Override
     public void movieLoaded() {
-
+        mMovieLoaded = true;
+        closeSplash();
     }
 
     @Override
     public void splashCanClose(boolean forceClose) {
-
+        mCanCloseSplash = true;
+        if (forceClose) {
+            mMovieLoaded = true;
+        }
+        closeSplash();
     }
 }
