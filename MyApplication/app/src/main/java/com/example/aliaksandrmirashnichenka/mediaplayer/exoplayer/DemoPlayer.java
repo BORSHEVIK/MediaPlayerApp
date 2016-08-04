@@ -58,6 +58,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * with one of a number of {@link RendererBuilder} classes to suit different use cases (e.g. DASH,
  * SmoothStreaming and so on).
  */
+@SuppressWarnings("ALL")
 public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventListener,
         HlsSampleSource.EventListener, ExtractorSampleSource.EventListener,
         SingleSampleSource.EventListener, DefaultBandwidthMeter.EventListener,
@@ -273,7 +274,7 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
         return player.getSelectedTrack(type);
     }
 
-    public void setSelectedTrack(int type, int index) {
+    public void setSelectedTrack(@SuppressWarnings("SameParameterValue") int type, int index) {
         player.setSelectedTrack(type, index);
         if (type == TYPE_TEXT && index < 0 && captionListener != null) {
             captionListener.onCues(Collections.<Cue>emptyList());

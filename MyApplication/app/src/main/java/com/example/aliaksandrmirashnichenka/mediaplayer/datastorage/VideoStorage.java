@@ -15,13 +15,13 @@ import java.util.List;
  *
  * Created by aliaksandrmirashnichenka on 01.08.16.
  */
-public class MovieStorage {
+public class VideoStorage {
 
-    private static final String TAG = MovieStorage.class.getSimpleName();
+    private static final String TAG = VideoStorage.class.getSimpleName();
 
-    private Context context;
+    private final Context context;
 
-    public MovieStorage(Context context) {
+    public VideoStorage(Context context) {
         this.context = context;
     }
 

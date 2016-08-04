@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.net.Uri;
@@ -24,8 +23,6 @@ import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.aliaksandrmirashnichenka.mediaplayer.MainActivity;
-import com.example.aliaksandrmirashnichenka.mediaplayer.MainActivity_;
 import com.example.aliaksandrmirashnichenka.mediaplayer.R;
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.DashRendererBuilder;
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.DemoPlayer;
@@ -65,12 +62,16 @@ import java.util.List;
 /**
  * Created by aliaksandrmirashnichenka on 01.08.16.
  */
+@SuppressWarnings("ALL")
 @EFragment(R.layout.fragment_video)
 public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
         DemoPlayer.Listener, DemoPlayer.Id3MetadataListener,
         AudioCapabilitiesReceiver.Listener  {
 
     private static final String TAG = PlayerFragment.class.getSimpleName();
+
+    private static final int PLAYER_CONTROLL_ADDITIONAL_POSITION_UP   = 15000; //milliseconds
+    private static final int PLAYER_CONTROLL_ADDITIONAL_POSITION_DOWN = 5000;  //milliseconds
 
     private static final CookieManager defaultCookieManager;
 
@@ -95,14 +96,13 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
 
     private boolean mPlayReady;
 
-    //
+    private MediaController mediaController;
+
     @ViewById(R.id.video_frame)
     protected AspectRatioFrameLayout videoFrame;
 
     @ViewById(R.id.surface_view)
     protected SurfaceView surfaceView;
-
-    private MediaController mediaController;
 
     @ViewById(R.id.navigation_panel)
     protected LinearLayout navigationLayout;
@@ -112,7 +112,6 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
 
     @ViewById(R.id.root)
     protected View root;
-    //
 
     @InstanceState
     protected ArrayList<Movie> mMovies;
@@ -140,13 +139,11 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
             }
             return true;
         });
-        root.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE
-                        || keyCode == KeyEvent.KEYCODE_MENU) {
-                    return false;
-                }
+        root.setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE
+                    || keyCode == KeyEvent.KEYCODE_MENU) {
+                return false;
+            } else {
                 return mediaController.dispatchKeyEvent(event);
             }
         });
@@ -194,12 +191,8 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
                 PlayerFragmentListener listener = (PlayerFragmentListener) PlayerFragment.this.getActivity();
                 if (listener != null) {
                     listener.videoChanged(movie.getID());
+                    toggleControlsVisibility();
                 }
-                /*
-                Intent startIntent = new Intent(getContext(), MainActivity_.class);
-                startIntent.putExtra(MainActivity.MOVIE_ID, movie.getID());
-                startActivity(startIntent);
-                */
             });
         }
     }
@@ -570,13 +563,13 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
             int keyCode = event.getKeyCode();
             if (playerControl.canSeekForward() && keyCode == KeyEvent.KEYCODE_MEDIA_FAST_FORWARD) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    playerControl.seekTo(playerControl.getCurrentPosition() + 15000); // milliseconds
+                    playerControl.seekTo(playerControl.getCurrentPosition() + PLAYER_CONTROLL_ADDITIONAL_POSITION_UP); // milliseconds
                     show();
                 }
                 return true;
             } else if (playerControl.canSeekBackward() && keyCode == KeyEvent.KEYCODE_MEDIA_REWIND) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    playerControl.seekTo(playerControl.getCurrentPosition() - 5000); // milliseconds
+                    playerControl.seekTo(playerControl.getCurrentPosition() - PLAYER_CONTROLL_ADDITIONAL_POSITION_DOWN); // milliseconds
                     show();
                 }
                 return true;
@@ -597,11 +590,11 @@ public class PlayerFragment extends Fragment  implements SurfaceHolder.Callback,
         }
     }
 
-    public void showNavigation() {
+    private void showNavigation() {
         navigationLayout.setVisibility(View.VISIBLE);
     }
 
-    public void hideNavigation() {
+    private void hideNavigation() {
         navigationLayout.setVisibility(View.INVISIBLE);
     }
 

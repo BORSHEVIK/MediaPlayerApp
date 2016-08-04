@@ -46,7 +46,7 @@ public class EventLogger implements DemoPlayer.Listener, DemoPlayer.InfoListener
     }
 
     private long sessionStartTimeMs;
-    private long[] loadStartTimeMs;
+    private final long[] loadStartTimeMs;
     private long[] availableRangeValuesUs;
 
     public EventLogger() {

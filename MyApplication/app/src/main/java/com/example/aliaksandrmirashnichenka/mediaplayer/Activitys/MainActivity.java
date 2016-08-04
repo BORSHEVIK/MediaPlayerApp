@@ -1,6 +1,6 @@
-package com.example.aliaksandrmirashnichenka.mediaplayer;
+package com.example.aliaksandrmirashnichenka.mediaplayer.Activitys;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,12 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.example.aliaksandrmirashnichenka.mediaplayer.BuildConfig;
 import com.example.aliaksandrmirashnichenka.mediaplayer.Fragments.PlayerFragmentListener;
 import com.example.aliaksandrmirashnichenka.mediaplayer.Fragments.PlayerFragment;
 import com.example.aliaksandrmirashnichenka.mediaplayer.Fragments.PlayerFragment_;
 import com.example.aliaksandrmirashnichenka.mediaplayer.Fragments.SplashFragment;
 import com.example.aliaksandrmirashnichenka.mediaplayer.Fragments.SplashFragment_;
-import com.example.aliaksandrmirashnichenka.mediaplayer.datastorage.MovieStorage;
+import com.example.aliaksandrmirashnichenka.mediaplayer.R;
+import com.example.aliaksandrmirashnichenka.mediaplayer.datastorage.VideoStorage;
 import com.example.aliaksandrmirashnichenka.mediaplayer.models.Movie;
 
 import org.androidannotations.annotations.AfterViews;
@@ -24,12 +26,11 @@ import org.androidannotations.annotations.UiThread;
 
 import java.util.ArrayList;
 
+@SuppressLint("Registered")
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity implements PlayerFragmentListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    public static final String MOVIE_ID = "Movie id";
 
     private boolean mMovieLoaded;
 
@@ -60,33 +61,24 @@ public class MainActivity extends AppCompatActivity implements PlayerFragmentLis
 
         updateScreenOrientation();
 
-        mMovieId = getIntent().getStringExtra(MOVIE_ID);
         if (mMovieId == null ) {
             mMovieId = BuildConfig.MOVIE_ID;
         }
-        loadData(mMovieId);
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        mReplaceVideo = true;
+        loadData();
     }
 
     /**
      * Invoke loading data from json file if movieList is null (not loaded yet)
      *
-     * @param id movie id
      */
     @Background
-    protected void loadData(String id) {
+    protected void loadData() {
         try {
             ArrayList<Movie> list;
             if (mMovieList != null) {
                 list = mMovieList;
             } else {
-                MovieStorage movieStorage = new MovieStorage(getApplicationContext());
+                VideoStorage movieStorage = new VideoStorage(getApplicationContext());
                 list = new ArrayList<>(movieStorage.loadMovies());
             }
             loadDataComplete(list);
@@ -191,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements PlayerFragmentLis
     /**
      * Update UI depends on orientation
      */
-    public void updateScreenOrientation() {
+    private void updateScreenOrientation() {
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             setFullscreen(false);

@@ -20,6 +20,7 @@ import org.androidannotations.annotations.ViewById;
 /**
  * Created by aliaksandrmirashnichenka on 01.08.16.
  */
+@SuppressWarnings("ALL")
 @EFragment(R.layout.fragment_splash)
 public class SplashFragment extends Fragment {
 

@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * Created by amirashnichenka on 8/2/2016.
  */
+@SuppressWarnings("ALL")
 @JsonObject
 public class Meta implements Serializable {
 

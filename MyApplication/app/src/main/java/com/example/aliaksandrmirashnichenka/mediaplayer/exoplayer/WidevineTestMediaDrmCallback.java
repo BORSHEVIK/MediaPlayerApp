@@ -37,7 +37,7 @@ public class WidevineTestMediaDrmCallback implements MediaDrmCallback {
 
     private final String defaultUri;
 
-    public WidevineTestMediaDrmCallback(String contentId, String provider) {
+    public WidevineTestMediaDrmCallback(@SuppressWarnings("SameParameterValue") String contentId, @SuppressWarnings("SameParameterValue") String provider) {
         String params = "?video_id=" + contentId + "&provider=" + provider;
         defaultUri = WIDEVINE_GTS_DEFAULT_BASE_URI + params;
     }

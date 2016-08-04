@@ -13,6 +13,7 @@ import java.io.Serializable;
 /**
  * Created by amirashnichenka on 8/2/2016.
  */
+@SuppressWarnings("ALL")
 @JsonObject
 public class Stream implements Serializable {
 
