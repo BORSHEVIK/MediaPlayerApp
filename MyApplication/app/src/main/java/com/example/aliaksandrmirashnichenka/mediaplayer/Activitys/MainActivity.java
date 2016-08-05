@@ -192,6 +192,8 @@ public class MainActivity extends AppCompatActivity implements PlayerFragmentLis
         }
     }
 
+    //PlayerFragmentListener implementation
+
     @Override
     public void movieLoaded() {
         mMovieLoaded = true;
