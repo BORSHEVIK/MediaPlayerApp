@@ -1,9 +1,10 @@
 package com.example.aliaksandrmirashnichenka.mediaplayer.fragments;
 
 /**
+ * This interface calling methods when video actions updated
+ *
  * Created by aliaksandrmirashnichenka on 01.08.16.
  */
-@SuppressWarnings("ALL")
 public interface PlayerFragmentListener {
 
     void movieLoaded();

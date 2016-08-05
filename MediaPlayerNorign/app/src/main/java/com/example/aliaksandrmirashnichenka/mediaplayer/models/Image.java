@@ -1,5 +1,7 @@
 package com.example.aliaksandrmirashnichenka.mediaplayer.models;
 
+import android.support.annotation.NonNull;
+
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,9 +13,10 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
+ * This class is Json model for Image
+ *
  * Created by amirashnichenka on 8/2/2016.
  */
-@SuppressWarnings("ALL")
 @JsonObject
 public class Image implements Serializable {
 
@@ -25,7 +28,8 @@ public class Image implements Serializable {
     @JsonProperty("placeholder")
     private String placeholder;
 
-    public static Image convertJsonToObject(JSONObject jsonObject) throws IOException {
+    @SuppressWarnings("unused")
+    public static Image convertJsonToObject(@NonNull JSONObject jsonObject) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(jsonObject.toString(), Image.class);
     }
@@ -34,7 +38,7 @@ public class Image implements Serializable {
         return cover;
     }
 
-    public void setCover(String mCoverName) {
+    public void setCover(@NonNull String mCoverName) {
         this.cover = mCoverName;
     }
 
@@ -42,7 +46,7 @@ public class Image implements Serializable {
         return placeholder;
     }
 
-    public void setPlaceholder(String mPlaceholderName) {
+    public void setPlaceholder(@NonNull String mPlaceholderName) {
         this.placeholder = mPlaceholderName;
     }
 }

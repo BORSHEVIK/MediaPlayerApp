@@ -3,6 +3,7 @@ package com.example.aliaksandrmirashnichenka.mediaplayer.fragments;
 import android.app.Activity;
 import android.graphics.Point;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.Display;
 import android.widget.ImageView;
@@ -18,9 +19,10 @@ import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.ViewById;
 
 /**
+ * This class is fragment which show splash screen
+ *
  * Created by aliaksandrmirashnichenka on 01.08.16.
  */
-@SuppressWarnings("ALL")
 @EFragment(R.layout.fragment_splash)
 public class SplashFragment extends Fragment {
 
@@ -43,7 +45,7 @@ public class SplashFragment extends Fragment {
     @InstanceState
     protected static Movie mMovie;
 
-    public void initInstance(Movie movie) {
+    public void initInstance(@NonNull Movie movie) {
         mMovie = movie;
     }
 
@@ -64,7 +66,7 @@ public class SplashFragment extends Fragment {
         handler.postDelayed(() -> closeSplash(true), MAX_SPLASH_TIME);
     }
 
-    private void closeSplash(boolean forceClose) {
+    private void closeSplash(@NonNull boolean forceClose) {
         Activity activity = getActivity();
         if (activity instanceof PlayerFragmentListener) {
             PlayerFragmentListener listener = (PlayerFragmentListener) activity;
@@ -72,7 +74,8 @@ public class SplashFragment extends Fragment {
         }
     }
 
-    private void initMovie(Movie movie) {
+    @SuppressWarnings("SuspiciousNameCombination")
+    private void initMovie(@NonNull Movie movie) {
         mTitle.setText(movie.getTitle());
         mYear.setText(String.valueOf(movie.getMeta().getReleaseYear()));
         mDescription.setText(movie.getDescription());

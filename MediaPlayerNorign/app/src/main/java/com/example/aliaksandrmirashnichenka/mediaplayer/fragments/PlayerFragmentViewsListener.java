@@ -9,9 +9,10 @@ import android.widget.ProgressBar;
 import com.google.android.exoplayer.AspectRatioFrameLayout;
 
 /**
+ * This interface provide View for manager
+ *
  * Created by aliaksandrmirashnichenka on 05.08.16.
  */
-@SuppressWarnings("ALL")
 public interface PlayerFragmentViewsListener {
 
     MediaController getMediaController();

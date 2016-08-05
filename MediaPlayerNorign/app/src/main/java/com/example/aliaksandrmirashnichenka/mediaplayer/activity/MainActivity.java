@@ -1,7 +1,8 @@
-package com.example.aliaksandrmirashnichenka.mediaplayer.Activitys;
+package com.example.aliaksandrmirashnichenka.mediaplayer.activity;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -38,14 +39,17 @@ public class MainActivity extends AppCompatActivity implements PlayerFragmentLis
 
     private ArrayList<Movie> mMovieList;
 
+    @SuppressWarnings("WeakerAccess")
     @InstanceState
     protected boolean mReplaceVideo;
 
+    @SuppressWarnings("WeakerAccess")
     @InstanceState
     protected String mMovieId;
 
     private boolean mInSavedState;
 
+    @SuppressWarnings("unused")
     @AfterViews
     protected void initActivity() {
         if (!mReplaceVideo) {
@@ -71,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements PlayerFragmentLis
      * Invoke loading data from json file if movieList is null (not loaded yet)
      *
      */
+    @SuppressWarnings("WeakerAccess")
     @Background
     protected void loadData() {
         try {
@@ -87,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements PlayerFragmentLis
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     @UiThread
     protected void loadDataComplete(ArrayList<Movie> list) {
         mMovieList = list;
@@ -98,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements PlayerFragmentLis
      *
      * @param id movie id
      */
-    private void showFragments(String id) {
+    private void showFragments(@NonNull String id) {
         if (!mReplaceVideo) {
             return;
         }
@@ -135,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements PlayerFragmentLis
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         updateScreenOrientation();
@@ -146,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements PlayerFragmentLis
      *
      * @param visible status bar visibility flag
      */
-    private void setFullscreen(boolean visible) {
+    private void setFullscreen(@NonNull boolean visible) {
         if (visible) {
             // Hide status bar
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);

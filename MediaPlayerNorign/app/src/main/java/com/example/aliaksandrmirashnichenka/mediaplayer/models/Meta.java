@@ -1,5 +1,7 @@
 package com.example.aliaksandrmirashnichenka.mediaplayer.models;
 
+import android.support.annotation.NonNull;
+
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,9 +14,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * This class is Json model for Meta
+ *
  * Created by amirashnichenka on 8/2/2016.
  */
-@SuppressWarnings("ALL")
 @JsonObject
 public class Meta implements Serializable {
 
@@ -30,7 +33,8 @@ public class Meta implements Serializable {
     @JsonProperty("actors")
     private List<Actor> actors;
 
-    public static Meta convertJsonToObject(JSONObject jsonObject) throws IOException {
+    @SuppressWarnings("unused")
+    public static Meta convertJsonToObject(@NonNull JSONObject jsonObject) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(jsonObject.toString(), Meta.class);
     }
@@ -39,7 +43,7 @@ public class Meta implements Serializable {
         return releaseYear;
     }
 
-    public void setReleaseYear(int mYear) {
+    public void setReleaseYear(@NonNull int mYear) {
         this.releaseYear = mYear;
     }
 
@@ -47,7 +51,7 @@ public class Meta implements Serializable {
         return directors;
     }
 
-    public void setDirectors(List<Director> mDirectors) {
+    public void setDirectors(@NonNull List<Director> mDirectors) {
         this.directors = mDirectors;
     }
 
@@ -55,7 +59,7 @@ public class Meta implements Serializable {
         return actors;
     }
 
-    public void setActors(List<Actor> mActors) {
+    public void setActors(@NonNull List<Actor> mActors) {
         this.actors = mActors;
     }
 }

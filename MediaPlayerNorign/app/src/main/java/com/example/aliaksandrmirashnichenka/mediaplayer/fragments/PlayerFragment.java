@@ -45,13 +45,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This class is fragment which showing video
+ *
  * Created by aliaksandrmirashnichenka on 01.08.16.
  */
-@SuppressWarnings("ALL")
 @EFragment(R.layout.fragment_video)
 public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback, AudioCapabilitiesReceiver.Listener,
         PlayerFragmentViewsListener, MediaPlayerManagerListener {
 
+    @SuppressWarnings("unused")
     private static final String TAG = PlayerFragment.class.getSimpleName();
 
     private static final int PLAYER_CONTROLL_ADDITIONAL_POSITION_UP   = 15000; //milliseconds
@@ -96,17 +98,18 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
     @InstanceState
     protected Movie mCurrentMovie;
 
-    public void initInstance(Movie movie, ArrayList<Movie> movies) {
+    public void initInstance(@NonNull Movie movie,@NonNull ArrayList<Movie> movies) {
         mMovies = movies;
         mCurrentMovie = movie;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     @AfterViews
     protected void initView() {
 
         mMediaPlayerManager.initMediaPlayerManager(this, this);
 
-        if (!mMediaPlayerManager.getPlayerReadyState()) {
+        if (mMediaPlayerManager.getPlayerReadyState()) {
             mMediaPlayerManager.setPlayerReadyState(MediaPlayerManager.NOT_PLAYER_WHEN_READY);
         }
 
@@ -258,7 +261,7 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
     // AudioCapabilitiesReceiver.Listener methods
 
     @Override
-    public void onAudioCapabilitiesChanged(AudioCapabilities audioCapabilities) {
+    public void onAudioCapabilitiesChanged(@NonNull AudioCapabilities audioCapabilities) {
         if (mMediaPlayerManager.getPlayer() == null) {
             return;
         }
@@ -271,14 +274,14 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
     //SurfaceHolder.Callback implementation
 
     @Override
-    public void surfaceCreated(SurfaceHolder holder) {
+    public void surfaceCreated(@NonNull SurfaceHolder holder) {
         if (mMediaPlayerManager.getPlayer() != null) {
             mMediaPlayerManager.getPlayer().setSurface(holder.getSurface());
         }
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder,
+    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder,
                                int i,
                                int i1,
                                int i2) {
@@ -286,7 +289,7 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
     }
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
         if (mMediaPlayerManager.getPlayer() != null) {
             mMediaPlayerManager.getPlayer().blockingClearSurface();
         }
@@ -295,7 +298,7 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
     // Permission request listener method
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(@NonNull int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             mMediaPlayerManager.preparePlayer(mContentType);
         } else {
@@ -323,7 +326,7 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
     }
 
     @TargetApi(23)
-    private boolean requiresPermission(Uri uri) {
+    private boolean requiresPermission(@NonNull Uri uri) {
         return Util.SDK_INT >= 23
                 && Util.isLocalFileUri(uri)
                 && getActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -352,7 +355,7 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
      * Notify activity that video is ready to play
      */
     private void updateActivity() {
-        if (!mMediaPlayerManager.getPlayerReadyState()) {
+        if (mMediaPlayerManager.getPlayerReadyState()) {
             Activity activity = getActivity();
             if (activity instanceof PlayerFragmentListener) {
                 PlayerFragmentListener listener = (PlayerFragmentListener) activity;

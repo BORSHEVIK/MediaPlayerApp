@@ -3,6 +3,7 @@ package com.example.aliaksandrmirashnichenka.mediaplayer.util;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -26,7 +27,7 @@ public class ImageHelper {
      * @param reqHeight height of target image
      * @return calculated sample size
      */
-    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    private static int calculateInSampleSize(@NonNull BitmapFactory.Options options, @NonNull int reqWidth, @NonNull int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -57,7 +58,7 @@ public class ImageHelper {
      * @return resized bitmap
      */
     @Nullable
-    public static Bitmap decodeSampledBitmapFromResource(Resources res, String path, int reqWidth, int reqHeight) {
+    public static Bitmap decodeSampledBitmapFromResource(@NonNull Resources res, @NonNull String path, @NonNull int reqWidth, @NonNull int reqHeight) {
         InputStream stream;
         try {
             stream = res.getAssets().open(path);

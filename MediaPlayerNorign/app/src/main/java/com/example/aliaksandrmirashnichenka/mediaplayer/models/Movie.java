@@ -1,5 +1,7 @@
 package com.example.aliaksandrmirashnichenka.mediaplayer.models;
 
+import android.support.annotation.NonNull;
+
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,9 +13,10 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
+ * This class is Json model for Movie
+ *
  * Created by amirashnichenka on 8/2/2016.
  */
-@SuppressWarnings("ALL")
 @JsonObject
 public class Movie implements Serializable {
 
@@ -41,7 +44,8 @@ public class Movie implements Serializable {
     @JsonProperty("streams")
     private Stream streams;
 
-    public static Movie convertJsonToObject(JSONObject jsonObject) throws IOException {
+    @SuppressWarnings("unused")
+    public static Movie convertJsonToObject(@NonNull JSONObject jsonObject) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(jsonObject.toString(), Movie.class);
     }
@@ -50,7 +54,7 @@ public class Movie implements Serializable {
         return id;
     }
 
-    public void setID(long mID) {
+    public void setID(@NonNull long mID) {
         this.id = mID;
     }
 
@@ -58,7 +62,7 @@ public class Movie implements Serializable {
         return title;
     }
 
-    public void setTitle(String mTitle) {
+    public void setTitle(@NonNull String mTitle) {
         this.title = mTitle;
     }
 
@@ -66,7 +70,7 @@ public class Movie implements Serializable {
         return meta;
     }
 
-    public void setMeta(Meta mMeta) {
+    public void setMeta(@NonNull Meta mMeta) {
         this.meta = mMeta;
     }
 
@@ -74,7 +78,7 @@ public class Movie implements Serializable {
         return images;
     }
 
-    public void setImages(Image mImage) {
+    public void setImages(@NonNull Image mImage) {
         this.images = mImage;
     }
 
@@ -82,7 +86,7 @@ public class Movie implements Serializable {
         return streams;
     }
 
-    public void setStreams(Stream mStream) {
+    public void setStreams(@NonNull Stream mStream) {
         this.streams = mStream;
     }
 
@@ -90,7 +94,7 @@ public class Movie implements Serializable {
         return description;
     }
 
-    public void setDescription(String mDescription) {
+    public void setDescription(@NonNull String mDescription) {
         this.description = mDescription;
     }
 }

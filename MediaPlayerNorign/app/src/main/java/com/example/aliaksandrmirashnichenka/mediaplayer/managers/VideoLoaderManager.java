@@ -1,6 +1,7 @@
 package com.example.aliaksandrmirashnichenka.mediaplayer.managers;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.bluelinelabs.logansquare.LoganSquare;
@@ -21,7 +22,7 @@ public class VideoLoaderManager {
 
     private final Context context;
 
-    public VideoLoaderManager(Context context) {
+    public VideoLoaderManager(@NonNull Context context) {
         this.context = context;
     }
 

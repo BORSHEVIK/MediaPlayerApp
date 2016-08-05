@@ -32,9 +32,10 @@ import org.androidannotations.annotations.EBean;
 import java.util.List;
 
 /**
+ * This class managing MediaPlayer
+ *
  * Created by aliaksandrmirashnichenka on 05.08.16.
  */
-@SuppressWarnings("ALL")
 @EBean
 public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3MetadataListener {
 
@@ -75,7 +76,7 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
     /**
      * @param contentType -  type of content
      */
-    public void preparePlayer(int contentType) {
+    public void preparePlayer(@NonNull int contentType) {
 
         if (mPlayer == null) {
             mPlayer = new DemoPlayer(getRendererBuilder(contentType));
@@ -119,7 +120,7 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
      *
      * @return DemoPlayer.RendererBuilder instance
      */
-    private DemoPlayer.RendererBuilder getRendererBuilder(int contentType) {
+    private DemoPlayer.RendererBuilder getRendererBuilder(@NonNull int contentType) {
         String userAgent = Util.getUserAgent(mPlayerFragmentViewsListener.getRootActivity(), "ExoPlayerDemo");
         switch (contentType) {
             case Util.TYPE_SS:
@@ -141,6 +142,7 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
     /**
      * @return - actual state of media mPlayer
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean getPlayerReadyState() {
         return this.mPlayReady;
     }
@@ -148,20 +150,21 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
     /**
      * @param readyState - state of media mPlayer
      */
-    public void setPlayerReadyState(boolean readyState) {
+    public void setPlayerReadyState(@NonNull boolean readyState) {
         this.mPlayReady = readyState;
     }
 
     /**
      * @param contentUri - Uri for movie content
      */
-    public void setContentUri(Uri contentUri) {
+    public void setContentUri(@NonNull Uri contentUri) {
         this.mContentUri = contentUri;
     }
 
     /**
      * @return - actual Uri for movie content
      */
+    @SuppressWarnings("unused")
     public Uri getContentUri() {
         return this.mContentUri;
     }
@@ -174,7 +177,7 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
     }
 
     @Override
-    public void onId3Metadata(List<Id3Frame> id3Frames) {
+    public void onId3Metadata(@NonNull List<Id3Frame> id3Frames) {
         for (Id3Frame id3Frame : id3Frames) {
             if (id3Frame instanceof TxxxFrame) {
                 TxxxFrame txxxFrame = (TxxxFrame) id3Frame;
@@ -193,8 +196,8 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
     }
 
     @Override
-    public void onStateChanged(boolean playWhenReady,
-                               int playbackState) {
+    public void onStateChanged(@NonNull boolean playWhenReady,
+                               @NonNull int playbackState) {
         if (playbackState == ExoPlayer.STATE_ENDED) {
             mMediaPlayerManagerListener.needShowControls();
         }
@@ -230,7 +233,7 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
     }
 
     @Override
-    public void onError(Exception e) {
+    public void onError(@NonNull Exception e) {
         String errorString = null;
         if (e instanceof UnsupportedDrmException) {
             // Special case DRM failures.
@@ -266,10 +269,10 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
     }
 
     @Override
-    public void onVideoSizeChanged(int width,
-                                   int height,
-                                   int unappliedRotationDegrees,
-                                   float pixelWidthHeightRatio) {
+    public void onVideoSizeChanged(@NonNull int width,
+                                   @NonNull int height,
+                                   @NonNull int unappliedRotationDegrees,
+                                   @NonNull float pixelWidthHeightRatio) {
         mPlayerFragmentViewsListener.getFrameLayout().setAspectRatio(height == 0 ? 1 : (width * pixelWidthHeightRatio) / height);
     }
 }
