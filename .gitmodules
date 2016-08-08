@@ -1,0 +1,6 @@
+[submodule "MediaPlayerApp"]
+	path = MediaPlayerApp
+	url = https://github.com/BORSHEVIK/MediaPlayerApp.git
+[submodule "ExoPlayer-1"]
+	path = ExoPlayer-1
+	url = https://github.com/BORSHEVIK/ExoPlayer-1.git
