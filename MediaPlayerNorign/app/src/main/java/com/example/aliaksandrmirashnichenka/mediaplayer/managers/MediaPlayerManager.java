@@ -1,5 +1,6 @@
 package com.example.aliaksandrmirashnichenka.mediaplayer.managers;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.HlsRendererBui
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.SmoothStreamingRendererBuilder;
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.SmoothStreamingTestMediaDrmCallback;
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.WidevineTestMediaDrmCallback;
+import com.example.aliaksandrmirashnichenka.mediaplayer.util.ErrorHelper;
 import com.google.android.exoplayer.ExoPlaybackException;
 import com.google.android.exoplayer.ExoPlayer;
 import com.google.android.exoplayer.MediaCodecTrackRenderer;
@@ -28,6 +30,7 @@ import com.google.android.exoplayer.metadata.id3.TxxxFrame;
 import com.google.android.exoplayer.util.Util;
 
 import org.androidannotations.annotations.EBean;
+import org.xml.sax.ErrorHandler;
 
 import java.util.List;
 
@@ -235,28 +238,9 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
     @Override
     public void onError(@NonNull Exception e) {
         String errorString = null;
-        if (e instanceof UnsupportedDrmException) {
-            // Special case DRM failures.
-            UnsupportedDrmException unsupportedDrmException = (UnsupportedDrmException) e;
-            errorString = mPlayerFragmentViewsListener.getRootContenxt().getString(Util.SDK_INT < 18 ? R.string.error_drm_not_supported
-                    : unsupportedDrmException.reason == UnsupportedDrmException.REASON_UNSUPPORTED_SCHEME
-                    ? R.string.error_drm_unsupported_scheme : R.string.error_drm_unknown);
-        } else if (e instanceof ExoPlaybackException && e.getCause() instanceof MediaCodecTrackRenderer.DecoderInitializationException) {
-            // Special case for decoder initialization failures.
-            MediaCodecTrackRenderer.DecoderInitializationException decoderInitializationException =
-                    (MediaCodecTrackRenderer.DecoderInitializationException) e.getCause();
-            if (decoderInitializationException.decoderName == null) {
-                if (decoderInitializationException.getCause() instanceof MediaCodecUtil.DecoderQueryException) {
-                    errorString = mPlayerFragmentViewsListener.getRootContenxt().getString(R.string.error_querying_decoders);
-                } else if (decoderInitializationException.secureDecoderRequired) {
-                    errorString = mPlayerFragmentViewsListener.getRootContenxt().getString(R.string.error_no_secure_decoder, decoderInitializationException.mimeType);
-                } else {
-                    errorString = mPlayerFragmentViewsListener.getRootContenxt().getString(R.string.error_no_decoder, decoderInitializationException.mimeType);
-                }
-            } else {
-                errorString = mPlayerFragmentViewsListener.getRootContenxt().getString(R.string.error_instantiating_decoder, decoderInitializationException.decoderName);
-            }
-        }
+
+        errorString = ErrorHelper.getBuildMessageFromError(e, mPlayerFragmentViewsListener.getRootContenxt());
+
         if (errorString == null) {
             errorString = e.getMessage();
         }

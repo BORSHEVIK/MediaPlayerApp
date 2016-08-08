@@ -87,4 +87,14 @@ public class SplashFragment extends Fragment {
 
         mImage.setImageBitmap(ImageHelper.decodeSampledBitmapFromResource(getResources(), "images/" + movie.getImages().getPlaceholder(), width, width));
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        mTitle = null;
+        mYear = null;
+        mDescription = null;
+        mImage = null;
+    }
 }

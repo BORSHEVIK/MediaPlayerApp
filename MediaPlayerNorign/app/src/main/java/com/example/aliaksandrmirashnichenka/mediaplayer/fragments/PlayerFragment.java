@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -240,6 +241,13 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
         if (Util.SDK_INT > 23) {
             onHidden();
         }
+
+        mVideoFrame = null;
+        mMediaController = null;
+        mSurfaceView = null;
+        mNavigationLayout = null;
+        mProgressBar = null;
+        mRoot = null;
     }
 
 
@@ -315,7 +323,6 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
      *
      * @return true if a permission request is made. False if it is not necessary.
      */
-    @TargetApi(23)
     private boolean maybeRequestPermission() {
         if (requiresPermission(mContentUri)) {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
@@ -325,11 +332,10 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
         }
     }
 
-    @TargetApi(23)
     private boolean requiresPermission(@NonNull Uri uri) {
         return Util.SDK_INT >= 23
                 && Util.isLocalFileUri(uri)
-                && getActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED;
     }
 
