@@ -54,7 +54,7 @@ public class Movie implements Serializable {
         return id;
     }
 
-    public void setID(@NonNull long mID) {
+    public void setID(long mID) {
         this.id = mID;
     }
 

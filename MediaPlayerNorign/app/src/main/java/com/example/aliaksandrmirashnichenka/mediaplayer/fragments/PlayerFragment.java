@@ -1,7 +1,6 @@
 package com.example.aliaksandrmirashnichenka.mediaplayer.fragments;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -306,7 +305,7 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
     // Permission request listener method
 
     @Override
-    public void onRequestPermissionsResult(@NonNull int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             mMediaPlayerManager.preparePlayer(mContentType);
         } else {

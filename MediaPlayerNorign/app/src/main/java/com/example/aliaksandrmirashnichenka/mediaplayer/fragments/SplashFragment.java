@@ -66,7 +66,7 @@ public class SplashFragment extends Fragment {
         handler.postDelayed(() -> closeSplash(true), MAX_SPLASH_TIME);
     }
 
-    private void closeSplash(@NonNull boolean forceClose) {
+    private void closeSplash(boolean forceClose) {
         Activity activity = getActivity();
         if (activity instanceof PlayerFragmentListener) {
             PlayerFragmentListener listener = (PlayerFragmentListener) activity;

@@ -27,7 +27,7 @@ public class ImageHelper {
      * @param reqHeight height of target image
      * @return calculated sample size
      */
-    private static int calculateInSampleSize(@NonNull BitmapFactory.Options options, @NonNull int reqWidth, @NonNull int reqHeight) {
+    private static int calculateInSampleSize(@NonNull BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -58,7 +58,7 @@ public class ImageHelper {
      * @return resized bitmap
      */
     @Nullable
-    public static Bitmap decodeSampledBitmapFromResource(@NonNull Resources res, @NonNull String path, @NonNull int reqWidth, @NonNull int reqHeight) {
+    public static Bitmap decodeSampledBitmapFromResource(@NonNull Resources res, @NonNull String path, int reqWidth, int reqHeight) {
         InputStream stream;
         try {
             stream = res.getAssets().open(path);

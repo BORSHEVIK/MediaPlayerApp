@@ -43,7 +43,7 @@ public class Meta implements Serializable {
         return releaseYear;
     }
 
-    public void setReleaseYear(@NonNull int mYear) {
+    public void setReleaseYear(int mYear) {
         this.releaseYear = mYear;
     }
 

@@ -1,6 +1,5 @@
 package com.example.aliaksandrmirashnichenka.mediaplayer.managers;
 
-import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.aliaksandrmirashnichenka.mediaplayer.fragments.PlayerFragmentViewsListener;
-import com.example.aliaksandrmirashnichenka.mediaplayer.R;
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.DashRendererBuilder;
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.DemoPlayer;
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.EventLogger;
@@ -18,11 +16,7 @@ import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.SmoothStreamin
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.SmoothStreamingTestMediaDrmCallback;
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.WidevineTestMediaDrmCallback;
 import com.example.aliaksandrmirashnichenka.mediaplayer.util.ErrorHelper;
-import com.google.android.exoplayer.ExoPlaybackException;
 import com.google.android.exoplayer.ExoPlayer;
-import com.google.android.exoplayer.MediaCodecTrackRenderer;
-import com.google.android.exoplayer.MediaCodecUtil;
-import com.google.android.exoplayer.drm.UnsupportedDrmException;
 import com.google.android.exoplayer.metadata.id3.GeobFrame;
 import com.google.android.exoplayer.metadata.id3.Id3Frame;
 import com.google.android.exoplayer.metadata.id3.PrivFrame;
@@ -30,7 +24,6 @@ import com.google.android.exoplayer.metadata.id3.TxxxFrame;
 import com.google.android.exoplayer.util.Util;
 
 import org.androidannotations.annotations.EBean;
-import org.xml.sax.ErrorHandler;
 
 import java.util.List;
 
@@ -79,7 +72,7 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
     /**
      * @param contentType -  type of content
      */
-    public void preparePlayer(@NonNull int contentType) {
+    public void preparePlayer(int contentType) {
 
         if (mPlayer == null) {
             mPlayer = new DemoPlayer(getRendererBuilder(contentType));
@@ -123,7 +116,7 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
      *
      * @return DemoPlayer.RendererBuilder instance
      */
-    private DemoPlayer.RendererBuilder getRendererBuilder(@NonNull int contentType) {
+    private DemoPlayer.RendererBuilder getRendererBuilder(int contentType) {
         String userAgent = Util.getUserAgent(mPlayerFragmentViewsListener.getRootActivity(), "ExoPlayerDemo");
         switch (contentType) {
             case Util.TYPE_SS:
@@ -153,7 +146,7 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
     /**
      * @param readyState - state of media mPlayer
      */
-    public void setPlayerReadyState(@NonNull boolean readyState) {
+    public void setPlayerReadyState(boolean readyState) {
         this.mPlayReady = readyState;
     }
 
@@ -199,8 +192,8 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
     }
 
     @Override
-    public void onStateChanged(@NonNull boolean playWhenReady,
-                               @NonNull int playbackState) {
+    public void onStateChanged(boolean playWhenReady,
+                               int playbackState) {
         if (playbackState == ExoPlayer.STATE_ENDED) {
             mMediaPlayerManagerListener.needShowControls();
         }
@@ -237,7 +230,7 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
 
     @Override
     public void onError(@NonNull Exception e) {
-        String errorString = null;
+        String errorString;
 
         errorString = ErrorHelper.getBuildMessageFromError(e, mPlayerFragmentViewsListener.getRootContenxt());
 
@@ -253,10 +246,10 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
     }
 
     @Override
-    public void onVideoSizeChanged(@NonNull int width,
-                                   @NonNull int height,
-                                   @NonNull int unappliedRotationDegrees,
-                                   @NonNull float pixelWidthHeightRatio) {
+    public void onVideoSizeChanged(int width,
+                                   int height,
+                                   int unappliedRotationDegrees,
+                                   float pixelWidthHeightRatio) {
         mPlayerFragmentViewsListener.getFrameLayout().setAspectRatio(height == 0 ? 1 : (width * pixelWidthHeightRatio) / height);
     }
 }

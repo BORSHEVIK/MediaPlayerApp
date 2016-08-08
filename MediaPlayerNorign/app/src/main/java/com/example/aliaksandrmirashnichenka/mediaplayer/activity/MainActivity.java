@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements PlayerFragmentLis
      *
      * @param visible status bar visibility flag
      */
-    private void setFullscreen(@NonNull boolean visible) {
+    private void setFullscreen(boolean visible) {
         if (visible) {
             // Hide status bar
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
