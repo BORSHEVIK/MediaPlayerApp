@@ -13,7 +13,7 @@ import java.io.InputStream;
 /**
  * Helper class for working with images
  *
- * Created by ibohdan on 4/29/2016.
+ * Created by aliaksandrmirashnichenka on 01.08.16.
  */
 public class ImageHelper {
 

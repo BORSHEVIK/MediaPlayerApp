@@ -10,8 +10,8 @@
         "actors": []
     },
     "images": {
-        "cover": "button_bigbuckbunny.png",
-        "placeholder": "loading_bigbuckbunny.png"
+        "cover": "cover-bigbuckbunny.png",
+        "placeholder": "placeholder-bigbuckbunny-1080p.png"
     },
     "streams": {
         "type": "mp4",
@@ -33,8 +33,8 @@
         }]
     },
     "images": {
-        "cover": "button_sintel.png",
-        "placeholder": "loading_sintel.png"
+        "cover": "cover-sintel.png",
+        "placeholder": "placeholder-sintel-1080p.png"
     },
     "streams": {
         "type": "mp4",
@@ -56,8 +56,8 @@
         }]
     },
     "images": {
-        "cover": "button_elephantsdream.png",
-        "placeholder": "loading_elephantsdream.png"
+        "cover": "cover-elephantsdream.png",
+        "placeholder": "placeholder-elephantsdream-1080p.png"
     },
     "streams": {
         "type": "webm",
