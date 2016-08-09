@@ -32,6 +32,7 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+        resValue "string", "app_name", "Norigin BigBuckBunny"
         buildConfigField 'String', MOVIE_ID, '"1"'
     }
     buildTypes {
