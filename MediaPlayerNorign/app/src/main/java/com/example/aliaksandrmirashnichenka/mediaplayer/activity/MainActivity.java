@@ -2,6 +2,7 @@ package com.example.aliaksandrmirashnichenka.mediaplayer.activity;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -123,12 +124,12 @@ public class MainActivity extends AppCompatActivity implements PlayerFragmentLis
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         PlayerFragment playerFragment = PlayerFragment_.builder().build();
-        fragmentManager.beginTransaction().replace(R.id.fragment_container_video, playerFragment).commit();
         playerFragment.initInstance(movie, mMovieList);
+        fragmentManager.beginTransaction().replace(R.id.fragment_container_video, playerFragment).commit();
 
         SplashFragment splashFragment = SplashFragment_.builder().build();
-        fragmentManager.beginTransaction().add(R.id.fragment_container_splash, splashFragment).commit();
         splashFragment.initInstance(movie);
+        fragmentManager.beginTransaction().add(R.id.fragment_container_splash, splashFragment).commit();
 
         mReplaceVideo = false;
     }

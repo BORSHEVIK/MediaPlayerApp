@@ -15,7 +15,7 @@ import com.google.android.exoplayer.util.Util;
  *
  * Created by aliaksandrmirashnichenka on 08.08.16.
  */
-public class ErrorHelper {
+public class ErrorFactory {
 
 
     /**
@@ -24,7 +24,7 @@ public class ErrorHelper {
      * @param context - root context
      * @return - message with information about error. can be Null
      */
-    public static String getBuildMessageFromError(@NonNull Exception e, @NonNull Context context) {
+    public static String createMessageFromError(@NonNull Exception e, @NonNull Context context) {
         String message = null;
 
         if (e instanceof UnsupportedDrmException) {

@@ -44,12 +44,6 @@ public class Movie implements Serializable {
     @JsonProperty("streams")
     private Stream streams;
 
-    @SuppressWarnings("unused")
-    public static Movie convertJsonToObject(@NonNull JSONObject jsonObject) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(jsonObject.toString(), Movie.class);
-    }
-
     public long getID() {
         return id;
     }

@@ -28,12 +28,6 @@ public class Stream implements Serializable {
     @JsonProperty("url")
     private String url;
 
-    @SuppressWarnings("unused")
-    public static Stream getObjectFromJson(@NonNull JSONObject jsonObject) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(jsonObject.toString(), Stream.class);
-    }
-
     public String getType() {
         return type;
     }

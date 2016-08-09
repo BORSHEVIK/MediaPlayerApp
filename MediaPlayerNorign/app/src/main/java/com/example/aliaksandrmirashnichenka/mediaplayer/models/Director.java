@@ -24,12 +24,6 @@ public class Director implements Serializable {
     @JsonProperty("name")
     private String name;
 
-    @SuppressWarnings("unused")
-    public static Director convertJsonToObject(@NonNull JSONObject jsonObject) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(jsonObject.toString(), Director.class);
-    }
-
     public String getName() {
         return name;
     }

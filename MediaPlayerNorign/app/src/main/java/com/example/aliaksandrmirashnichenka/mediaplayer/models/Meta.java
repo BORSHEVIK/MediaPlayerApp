@@ -33,12 +33,6 @@ public class Meta implements Serializable {
     @JsonProperty("actors")
     private List<Actor> actors;
 
-    @SuppressWarnings("unused")
-    public static Meta convertJsonToObject(@NonNull JSONObject jsonObject) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(jsonObject.toString(), Meta.class);
-    }
-
     public int getReleaseYear() {
         return releaseYear;
     }

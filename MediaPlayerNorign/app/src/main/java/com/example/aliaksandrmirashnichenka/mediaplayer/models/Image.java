@@ -28,12 +28,6 @@ public class Image implements Serializable {
     @JsonProperty("placeholder")
     private String placeholder;
 
-    @SuppressWarnings("unused")
-    public static Image convertJsonToObject(@NonNull JSONObject jsonObject) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(jsonObject.toString(), Image.class);
-    }
-
     public String getCover() {
         return cover;
     }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -56,6 +57,9 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
     @SuppressWarnings("unused")
     private static final String TAG = PlayerFragment.class.getSimpleName();
 
+    public static final String MOVIES_EXTRA = "Movies extra";
+    public static final String CURRENT_MOVIE_EXTRA = "Current movie extra";
+
     private static final int PLAYER_CONTROLL_ADDITIONAL_POSITION_UP   = 15000; //milliseconds
     private static final int PLAYER_CONTROLL_ADDITIONAL_POSITION_DOWN = 5000;  //milliseconds
 
@@ -101,11 +105,27 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
     public void initInstance(@NonNull Movie movie,@NonNull ArrayList<Movie> movies) {
         mMovies = movies;
         mCurrentMovie = movie;
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(MOVIES_EXTRA, movies);
+        bundle.putSerializable(CURRENT_MOVIE_EXTRA, mCurrentMovie);
+
+        setArguments(bundle);
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
     @AfterViews
     protected void initView() {
+
+        Bundle arguments = getArguments();
+
+        if (mMovies == null) {
+            mMovies = (ArrayList<Movie>) arguments.getSerializable(MOVIES_EXTRA);
+        }
+
+        if (mCurrentMovie == null) {
+            mCurrentMovie = (Movie) arguments.getSerializable(CURRENT_MOVIE_EXTRA);
+        }
 
         mMediaPlayerManager.initMediaPlayerManager(this, this);
 
@@ -240,13 +260,6 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
         if (Util.SDK_INT > 23) {
             onHidden();
         }
-
-        mVideoFrame = null;
-        mMediaController = null;
-        mSurfaceView = null;
-        mNavigationLayout = null;
-        mProgressBar = null;
-        mRoot = null;
     }
 
 
@@ -263,6 +276,21 @@ public class PlayerFragment extends Fragment  implements  SurfaceHolder.Callback
 
         mAudioCapabilitiesReceiver.unregister();
         mMediaPlayerManager.releasePlayer();
+    }
+
+    /**
+     * Release all Views
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        mVideoFrame = null;
+        mMediaController = null;
+        mSurfaceView = null;
+        mNavigationLayout = null;
+        mProgressBar = null;
+        mRoot = null;
     }
 
     // AudioCapabilitiesReceiver.Listener methods

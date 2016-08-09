@@ -2,6 +2,7 @@ package com.example.aliaksandrmirashnichenka.mediaplayer.fragments;
 
 import android.app.Activity;
 import android.graphics.Point;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -30,6 +31,8 @@ public class SplashFragment extends Fragment {
 
     private static final int MAX_SPLASH_TIME = 10000; // milliseconds
 
+    public static final String MOVIEW_EXTRA = "Movie extra";
+
     @ViewById(R.id.title)
     protected TextView mTitle;
 
@@ -47,10 +50,21 @@ public class SplashFragment extends Fragment {
 
     public void initInstance(@NonNull Movie movie) {
         mMovie = movie;
+
+        Bundle bundle = new Bundle();
+
+        bundle.putSerializable(MOVIEW_EXTRA, movie);
+        setArguments(bundle);
     }
 
     @AfterViews
     protected void initView() {
+        Bundle arguments = getArguments();
+
+        if (mMovie == null) {
+            mMovie = (Movie) arguments.getSerializable(MOVIEW_EXTRA);
+        }
+
         initMovie(mMovie);
     }
 
@@ -88,9 +102,12 @@ public class SplashFragment extends Fragment {
         mImage.setImageBitmap(ImageHelper.decodeSampledBitmapFromResource(getResources(), "images/" + movie.getImages().getPlaceholder(), width, width));
     }
 
+    /**
+     * Release all Views
+     */
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroyView() {
+        super.onDestroyView();
 
         mTitle = null;
         mYear = null;

@@ -15,7 +15,7 @@ import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.HlsRendererBui
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.SmoothStreamingRendererBuilder;
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.SmoothStreamingTestMediaDrmCallback;
 import com.example.aliaksandrmirashnichenka.mediaplayer.exoplayer.WidevineTestMediaDrmCallback;
-import com.example.aliaksandrmirashnichenka.mediaplayer.util.ErrorHelper;
+import com.example.aliaksandrmirashnichenka.mediaplayer.util.ErrorFactory;
 import com.google.android.exoplayer.ExoPlayer;
 import com.google.android.exoplayer.metadata.id3.GeobFrame;
 import com.google.android.exoplayer.metadata.id3.Id3Frame;
@@ -232,7 +232,7 @@ public class MediaPlayerManager implements DemoPlayer.Listener, DemoPlayer.Id3Me
     public void onError(@NonNull Exception e) {
         String errorString;
 
-        errorString = ErrorHelper.getBuildMessageFromError(e, mPlayerFragmentViewsListener.getRootContenxt());
+        errorString = ErrorFactory.createMessageFromError(e, mPlayerFragmentViewsListener.getRootContenxt());
 
         if (errorString == null) {
             errorString = e.getMessage();

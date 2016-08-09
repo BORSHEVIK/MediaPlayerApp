@@ -24,13 +24,6 @@ public class Actor implements Serializable {
     @JsonProperty("name")
     private String name;
 
-
-    @SuppressWarnings("unused")
-    public static Actor convertJsonToObject(@NonNull JSONObject jsonObject) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(jsonObject.toString(), Actor.class);
-    }
-
     public String getName() {
         return name;
     }
